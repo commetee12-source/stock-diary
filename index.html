@@ -3,418 +3,592 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Diary - 스마트한 주식 가계부</title>
+    <title>Stock Diary Ultra - 혁신적인 투자 관리</title>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100..900&family=Outfit:wght@400..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-bg: #0a0e17;
-            --secondary-bg: #161c2d;
-            --accent-color: #3b82f6;
-            --text-main: #e2e8f0;
-            --text-dim: #94a3b8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --border-color: #2d3748;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            --transition: all 0.3s ease;
+            /* 울트라 프리미엄 네온 & 그라디언트 팔레트 */
+            --bg-base: #020617;
+            --bg-surface: rgba(15, 23, 42, 0.6);
+            --primary-neon: #38bdf8;
+            --secondary-neon: #818cf8;
+            --accent-neon: #f472b6;
+            --success-neon: #4ade80;
+            --danger-neon: #fb7185;
+            
+            --grad-prime: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            --grad-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+            
+            --text-ultra: #f8fafc;
+            --text-soft: #94a3b8;
+            --border-neon: rgba(56, 189, 248, 0.2);
+            
+            --shadow-neon: 0 0 20px rgba(56, 189, 248, 0.15);
+            --glass-blur: blur(20px);
+            --trans-quick: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --trans-fancy: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Pretendard', sans-serif;
         }
 
         body {
-            background-color: var(--primary-bg);
-            color: var(--text-main);
-            line-height: 1.6;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 20% 0%, rgba(56, 189, 248, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 100%, rgba(244, 114, 182, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 60%);
+            color: var(--text-ultra);
+            min-height: 100vh;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 2rem 1.5rem;
+            width: 100%;
         }
 
         header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #60a5fa, #3b82f6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            background-color: var(--secondary-bg);
-            padding: 0.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: var(--card-shadow);
-            position: sticky;
-            top: 1rem;
-            z-index: 100;
-        }
-
-        .nav-link {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            color: var(--text-dim);
-        }
-
-        .nav-link.active {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .nav-link:hover:not(.active) {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: var(--text-main);
-        }
-
-        /* Sections */
-        .page-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Cards & Components */
-        .card {
-            background-color: var(--secondary-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-        }
-
-        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.75rem;
+            margin-bottom: 4rem;
+            padding: 1rem 0;
+        }
+
+        .brand h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            background: linear-gradient(to bottom right, #fff 40%, var(--primary-neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .brand h1::after {
+            content: 'ULTRA';
+            position: absolute;
+            top: -10px; right: -40px;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            background: var(--grad-prime);
+            -webkit-text-fill-color: white;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+
+        /* Floating Navigation */
+        nav {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: var(--glass-blur);
+            padding: 0.6rem;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-link {
+            padding: 0.9rem 2rem;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: var(--trans-fancy);
+            font-weight: 700;
+            color: var(--text-soft);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-link.active {
+            background: var(--grad-prime);
+            color: white;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .nav-link:hover:not(.active) {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Ultra Cards */
+        .card {
+            background: var(--bg-surface);
+            backdrop-filter: var(--glass-blur);
+            border-radius: 32px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--border-neon);
+            box-shadow: var(--shadow-neon);
+            position: relative;
+            overflow: hidden;
+            transition: var(--trans-fancy);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.5), transparent);
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 15px 40px rgba(56, 189, 248, 0.1);
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--accent-color);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .card-title i {
+            width: 8px;
+            height: 24px;
+            background: var(--grad-prime);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Action Buttons */
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 18px;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+            transition: var(--trans-fancy);
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .btn-prime {
+            background: var(--grad-prime);
+            color: white;
+            box-shadow: 0 8px 15px rgba(56, 189, 248, 0.3);
+        }
+        .btn-prime:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(56, 189, 248, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-neon);
+            color: var(--primary-neon);
+        }
+        .btn-outline:hover {
+            background: var(--border-neon);
+            color: white;
         }
 
         /* Form Styling */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: 2rem;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
+        .input-box label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--text-dim);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-soft);
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: #1a2236;
+            padding: 1.1rem 1.4rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-neon);
+            background: rgba(0, 0, 0, 0.3);
             color: white;
-            outline: none;
-            transition: var(--transition);
+            font-size: 1rem;
+            transition: var(--trans-quick);
         }
 
         input:focus, select:focus, textarea:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary { background-color: var(--accent-color); color: white; }
-        .btn-primary:hover { background-color: #2563eb; }
-        .btn-danger { background-color: var(--danger); color: white; }
-        .btn-danger:hover { background-color: #dc2626; }
-        .btn-success { background-color: var(--success); color: white; }
-        .btn-success:hover { background-color: #059669; }
-        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
-        .btn-outline:hover { background-color: var(--border-color); }
-
-        /* Table Styling */
-        .table-container {
+        /* Table Design */
+        .table-wrap {
             overflow-x: auto;
+            border-radius: 24px;
+            border: 1px solid var(--border-neon);
+            background: rgba(0,0,0,0.2);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
+        table { width: 100%; border-collapse: collapse; }
 
         th {
-            background-color: rgba(0, 0, 0, 0.2);
-            color: var(--text-dim);
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-soft);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-align: left;
+        }
+
+        td {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1rem;
+            color: var(--text-ultra);
+            transition: var(--trans-quick);
+        }
+
+        tr:hover td { background: rgba(56, 189, 248, 0.05); }
+
+        /* Stats Blocks */
+        .stats-wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-box {
+            background: var(--grad-surface);
+            border-radius: 32px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-neon);
+            text-align: center;
+        }
+
+        .stat-box .val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--grad-prime);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0.5rem 0;
+        }
+
+        .stat-box .lab {
+            font-size: 0.9rem;
+            color: var(--text-soft);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
         }
 
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-        }
-
-        .text-right { text-align: right; }
-        .text-center { text-align: center; }
-
-        /* Summary Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background-color: var(--secondary-bg);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border-left: 4px solid var(--accent-color);
-            box-shadow: var(--card-shadow);
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
-
-        /* AI Chat UI */
-        #chat-container {
-            height: 400px;
+        /* AI Chat UI Ultra */
+        #chat-board {
+            height: 500px;
             overflow-y: auto;
-            padding: 1rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 24px;
+            border: 1px solid var(--border-neon);
+            margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background-color: rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
+            gap: 1.5rem;
         }
 
-        .message {
+        .msg {
             max-width: 80%;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            position: relative;
+            padding: 1.2rem 1.8rem;
+            border-radius: 22px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            animation: fadeIn 0.4s ease-out;
         }
 
-        .message.user {
+        .msg.user {
             align-self: flex-end;
-            background-color: var(--accent-color);
+            background: var(--grad-prime);
             color: white;
-            border-bottom-right-radius: 2px;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
         }
 
-        .message.ai {
+        .msg.ai {
             align-self: flex-start;
-            background-color: var(--border-color);
-            color: var(--text-main);
-            border-bottom-left-radius: 2px;
+            background: #1e293b;
+            color: white;
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .ai-footer {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-top: 0.5rem;
-            font-style: italic;
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        #chat-input-area {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal.active { display: flex; }
-
-        .modal-content {
-            background-color: var(--secondary-bg);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 20px;
-            padding: 2rem;
-            position: relative;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Loading */
-        .loading-dots:after {
-            content: '.';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-        }
-
-        /* Utility */
-        .hidden { display: none; }
-        .pos { color: var(--success); }
-        .neg { color: var(--danger); }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .nav-link { padding: 0.5rem 1rem; font-size: 0.875rem; }
-            header h1 { font-size: 1.75rem; }
+            .brand h1 { font-size: 2.2rem; }
+            .nav-link { padding: 0.7rem 1.2rem; font-size: 0.8rem; }
+            .stat-box .val { font-size: 1.8rem; }
+            .card { padding: 1.5rem; }
         }
+
+        /* Specialized tags */
+        .neon-text-pos { color: var(--success-neon); text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); font-weight: 800; }
+        .neon-text-neg { color: var(--danger-neon); text-shadow: 0 0 10px rgba(251, 113, 133, 0.3); font-weight: 800; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" style="padding-top: 4rem;">
     <header>
-        <h1>Stock Diary</h1>
-        <p style="color: var(--text-dim)">당신의 투자 여정을 기록하고 분석하세요</p>
+        <div class="brand">
+            <h1>Stock Diary</h1>
+            <p style="color: var(--text-soft); font-weight: 600; letter-spacing: 0.1em; margin-top: 0.5rem; text-transform: uppercase;">Ultra Smart Portfolio Manager</p>
+        </div>
+        <div style="text-align: right;">
+            <div id="clock" style="font-family: 'Space Grotesk'; font-size: 1.5rem; font-weight: 700; color: var(--primary-neon);">13:45</div>
+            <div style="font-size: 0.8rem; color: var(--text-soft); font-weight: 700;">2026.03.15 SUN</div>
+        </div>
     </header>
+
+    <div class="stats-wrap">
+        <div class="stat-box">
+            <div class="lab">Portfolio Value</div>
+            <div class="val" id="summary-total-invest">₩0</div>
+        </div>
+        <div class="stat-box">
+            <div class="lab">Active Symbols</div>
+            <div class="val" id="summary-stock-count">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="lab">Primary Sector</div>
+            <div class="val" id="summary-max-sector" style="font-size: 1.4rem;">-</div>
+        </div>
+    </div>
+
+    <!-- 페이지 영역 -->
+    <main>
+        <!-- 매매기록 -->
+        <div id="records" class="page-content active">
+            <div class="card">
+                <h2 class="card-title"><i></i>Add New Order</h2>
+                <form id="record-form">
+                    <div class="form-grid">
+                        <div class="input-box">
+                            <label>Stock name</label>
+                            <input type="text" id="stockName" required placeholder="예: 삼성전자">
+                        </div>
+                        <div class="input-box">
+                            <label>Sector</label>
+                            <select id="sector" required>
+                                <option value="">분류 선택</option>
+                                <option value="IT/반도체">IT/반도체</option>
+                                <option value="바이오/헬스케어">바이오/헬스케어</option>
+                                <option value="금융">금융</option>
+                                <option value="에너지/화학">에너지/화학</option>
+                                <option value="소비재/유통">소비재/유통</option>
+                                <option value="자동차/운송">자동차/운송</option>
+                                <option value="건설/부동산">건설/부동산</option>
+                                <option value="엔터테인먼트/미디어">엔터테인먼트/미디어</option>
+                                <option value="통신">통신</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+                        <div class="input-box">
+                            <label>Date</label>
+                            <input type="date" id="tradeDate" required>
+                        </div>
+                        <div class="input-box">
+                            <label>Price</label>
+                            <input type="number" id="tradePrice" required min="1">
+                        </div>
+                        <div class="input-box">
+                            <label>Quantity</label>
+                            <input type="number" id="tradeQuantity" required min="1">
+                        </div>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                             <div style="color: var(--text-soft); font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase;">Order Total Preview</div>
+                             <div id="preview-total" style="font-family: 'Space Grotesk'; font-size: 2.2rem; font-weight: 800; color: var(--success-neon); text-shadow: 0 0 20px rgba(74, 222, 128, 0.2);">₩0</div>
+                        </div>
+                        <button type="submit" class="btn btn-prime">Commit Position</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title"><i></i>History Log</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('tradeDate')" style="cursor:pointer">Date ⇅</th>
+                                <th onclick="sortTable('stockName')" style="cursor:pointer">Symbol ⇅</th>
+                                <th>Sector</th>
+                                <th style="text-align: right;">Price</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th style="text-align: right;" onclick="sortTable('totalPrice')" style="cursor:pointer">Total ⇅</th>
+                                <th style="text-align: center;">Control</th>
+                            </tr>
+                        </thead>
+                        <tbody id="records-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 포트폴리오 -->
+        <div id="portfolio" class="page-content">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="card">
+                    <h2 class="card-title"><i></i>Allocation</h2>
+                    <div style="height: 350px;">
+                        <canvas id="sectorChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2 class="card-title"><i></i>Sector Radar</h2>
+                    <div class="table-wrap" style="border: none; background: transparent;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sector</th>
+                                    <th style="text-align: center;">Assets</th>
+                                    <th style="text-align: right;">Ratio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sector-summary-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="margin-top: 2rem;">
+                <h2 class="card-title"><i></i>Holding Strategy</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Category</th>
+                                <th style="text-align: right;">Avg Price</th>
+                                <th style="text-align: right;">Quantity</th>
+                                <th style="text-align: right;">Total Capital</th>
+                                <th style="text-align: right;">Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stock-summary-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI 상담 -->
+        <div id="ai-consult" class="page-content">
+            <div class="card" style="min-height: 700px; display: flex; flex-direction: column;">
+                <div class="card-header">
+                    <h2 class="card-title" style="margin-bottom: 0;"><i></i>Gemini Insight Hub</h2>
+                    <div id="api-status" style="font-size: 0.8rem; font-weight: 800; color: var(--danger-neon);">API OFFLINE</div>
+                </div>
+                <div id="chat-board">
+                    <div class="msg ai">
+                        웰컴 투 Stock Diary Ultra. 당신의 데이터를 정밀 분석하여 압도적인 통찰력을 전달합니다. 
+                        무엇을 분석해 드릴까요?
+                    </div>
+                </div>
+                <form id="chat-form" style="display: flex; gap: 1rem;">
+                    <input type="text" id="chat-input" placeholder="전략적 질문을 입력하세요..." autocomplete="off" style="flex: 1; border-radius: 100px; padding-left: 2rem;">
+                    <button type="submit" class="btn btn-prime" style="border-radius: 100px;">Ask Expert AI</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 설정 -->
+        <div id="settings" class="page-content">
+            <div class="card">
+                <h2 class="card-title"><i></i>Security Authorization</h2>
+                <div class="input-box">
+                    <label>Gemini Pro 1.5 API Key</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="password" id="api-key-input" placeholder="키값을 입력하여 AI를 활성화하세요" style="flex: 1;">
+                        <button class="btn btn-prime" onclick="saveApiKey()" style="padding: 0.8rem 2rem; font-size: 0.9rem;">Authorize</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h2 class="card-title"><i></i>Data Infrastructure</h2>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-outline" onclick="exportToCSV()">Export CSV</button>
+                    <button class="btn btn-outline" onclick="exportToJSON()">Backup JSON</button>
+                    <label class="btn btn-outline" style="cursor: pointer;">
+                        Restore JSON
+                        <input type="file" id="import-json" class="hidden" accept=".json" onchange="importFromJSON(event)">
+                    </label>
+                    <button class="btn btn-danger" onclick="clearAllData()" style="padding: 1rem 2rem; border: 1px solid var(--danger-neon); color: var(--danger-neon); background: rgba(251, 113, 133, 0.05);">Destroy Database</button>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <nav>
         <div class="nav-link active" onclick="showPage('records')">매매기록</div>
-        <div class="nav-link" onclick="showPage('portfolio')">포트폴리오</div>
-        <div class="nav-link" onclick="showPage('ai-consult')">AI 상담</div>
+        <div class="nav-link" onclick="showPage('portfolio')">분석</div>
+        <div class="nav-link" onclick="showPage('ai-consult')">상담</div>
         <div class="nav-link" onclick="showPage('settings')">설정</div>
     </nav>
+</div>
 
-    <!-- 매매기록 페이지 -->
-    <div id="records" class="page-content active">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">매매 내역 입력</h2>
-            </div>
-            <form id="record-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>종목명 *</label>
-                        <input type="text" id="stockName" required placeholder="예: 삼성전자">
-                    </div>
-                    <div class="form-group">
-                        <label>업종/섹터 *</label>
-                        <select id="sector" required>
-                            <option value="">선택하세요</option>
-                            <option value="IT/반도체">IT/반도체</option>
-                            <option value="바이오/헬스케어">바이오/헬스케어</option>
-                            <option value="금융">금융</option>
-                            <option value="에너지/화학">에너지/화학</option>
-                            <option value="소비재/유통">소비재/유통</option>
-                            <option value="자동차/운송">자동차/운송</option>
-                            <option value="건설/부동산">건설/부동산</option>
-                            <option value="엔터테인먼트/미디어">엔터테인먼트/미디어</option>
-                            <option value="통신">통신</option>
-                            <option value="기타">기타</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>매수일 *</label>
-                        <input type="date" id="tradeDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>매수가 (원) *</label>
-                        <input type="number" id="tradePrice" required min="1" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>수량 *</label>
-                        <input type="number" id="tradeQuantity" required min="1" placeholder="0">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>메모</label>
-                    <textarea id="memo" rows="2" placeholder="투자의견을 적어보세요"></textarea>
-                </div>
-                <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                    <div style="color: var(--text-dim)">예상 매수금액: <span id="preview-total" style="color: white; font-weight: bold;">₩0</span></div>
-                    <button type="submit" class="btn btn-primary">기록 추가</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">기록 목록</h2>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="search-input" placeholder="종목명 검색" style="padding: 0.5rem; width: 150px; font-size: 0.8rem;">
-                    <select id="filter-sector" style="padding: 0.5rem; width: 120px; font-size: 0.8rem;">
-                        <option value="all">전체 업종</option>
+<!-- 수정 모달 -->
+<div id="edit-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index:10000; justify-content:center; align-items:center;">
+    <div class="card" style="width: 90%; max-width: 600px; padding: 3rem;">
+        <h2 class="card-title"><i></i>Edit Position Data</h2>
+        <form id="edit-form">
+            <input type="hidden" id="edit-index">
+            <div class="form-grid">
+                <div class="input-box"><label>Stock</label><input type="text" id="edit-stockName" required></div>
+                <div class="input-box">
+                    <label>Sector</label>
+                    <select id="edit-sector" required>
                         <option value="IT/반도체">IT/반도체</option>
                         <option value="바이오/헬스케어">바이오/헬스케어</option>
                         <option value="금융">금융</option>
@@ -427,267 +601,53 @@
                         <option value="기타">기타</option>
                     </select>
                 </div>
+                <div class="input-box"><label>Date</label><input type="date" id="edit-tradeDate" required></div>
+                <div class="input-box"><label>Price</label><input type="number" id="edit-tradePrice" required min="1"></div>
+                <div class="input-box"><label>Qty</label><input type="number" id="edit-tradeQuantity" required min="1"></div>
             </div>
-            <div class="table-container">
-                <table id="records-table">
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable('tradeDate')" style="cursor:pointer">날짜 ⇅</th>
-                            <th onclick="sortTable('stockName')" style="cursor:pointer">종목명 ⇅</th>
-                            <th>업종</th>
-                            <th class="text-right">매수가</th>
-                            <th class="text-right">수량</th>
-                            <th class="text-right" onclick="sortTable('totalPrice')" style="cursor:pointer">총 금액 ⇅</th>
-                            <th>메모</th>
-                            <th class="text-center">액션</th>
-                        </tr>
-                    </thead>
-                    <tbody id="records-body">
-                        <!-- JS로 채워짐 -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- 포트폴리오 페이지 -->
-    <div id="portfolio" class="page-content">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">총 투자금액</div>
-                <div class="stat-value" id="summary-total-invest">₩0</div>
-            </div>
-            <div class="stat-card" style="border-left-color: var(--success)">
-                <div class="stat-label">보유 종목 수</div>
-                <div class="stat-value" id="summary-stock-count">0</div>
-            </div>
-            <div class="stat-card" style="border-left-color: #f59e0b">
-                <div class="stat-label">총 보유 주식 수</div>
-                <div class="stat-value" id="summary-total-qty">0</div>
-            </div>
-            <div class="stat-card" style="border-left-color: #8b5cf6">
-                <div class="stat-label">최대 비중 업종</div>
-                <div class="stat-value" id="summary-max-sector">-</div>
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;" class="portfolio-visuals">
-             <div class="card" style="flex: 1;">
-                <h2 class="card-title" style="margin-bottom: 1rem;">업종별 비중</h2>
-                <div style="height: 300px; display: flex; justify-content: center;">
-                    <canvas id="sectorChart"></canvas>
-                </div>
-            </div>
-            <div class="card" style="flex: 1;">
-                <h2 class="card-title" style="margin-bottom: 1rem;">업종별 요약</h2>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>업종</th>
-                                <th class="text-center">종목수</th>
-                                <th class="text-right">투자금액</th>
-                                <th class="text-right">비중</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sector-summary-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">종목별 요약</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>종목명</th>
-                            <th>업종</th>
-                            <th class="text-right">평균단가</th>
-                            <th class="text-right">총 수량</th>
-                            <th class="text-right">총 투자금액</th>
-                            <th class="text-right">비중 (%)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="stock-summary-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- AI 상담 페이지 -->
-    <div id="ai-consult" class="page-content">
-        <div class="card" style="height: 600px; display: flex; flex-direction: column;">
-            <div class="card-header">
-                <h2 class="card-title">Gemini 투자 AI 어시스턴트</h2>
-                <span id="api-status-badge" class="stat-label" style="background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 4px 10px; border-radius: 20px;">API 키 필요</span>
-            </div>
-            
-            <div id="chat-container">
-                <div class="message ai">
-                    안녕하세요! 당신의 포트폴리오를 기반으로 맞춤형 투자 상담을 도와드리는 Gemini AI입니다. 
-                    계좌의 분산투자 현황 분석이나 리스크 조언이 필요하시면 언제든 물어봐주세요.
-                    <div class="ai-footer">이 정보는 참고용이며, 실제 투자 결정은 전문가와 상담하세요.</div>
-                </div>
-            </div>
-
-            <div id="api-warning" class="hidden" style="margin-bottom: 1rem; padding: 1rem; background: rgba(239,68,68,0.1); border-radius: 12px; color: var(--danger); font-size: 0.9rem; border: 1px solid var(--danger);">
-                ⚠️ 설정 탭에서 Gemini API 키를 등록해야 AI 상담 기능을 이용하실 수 있습니다.
-            </div>
-
-            <form id="chat-form">
-                <div id="chat-input-area">
-                    <input type="text" id="chat-input" placeholder="질문을 입력하세요... (예: 내 포트폴리오의 리스크는 어때?)" autocomplete="off">
-                    <button type="submit" class="btn btn-primary" id="chat-send-btn">전송</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 설정 페이지 -->
-    <div id="settings" class="page-content">
-        <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">Gemini API 설정</h2>
-            <div class="form-group">
-                <label>Google Gemini API Key</label>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="password" id="api-key-input" placeholder="이곳에 API 키를 입력하세요">
-                    <button class="btn btn-primary" onclick="saveApiKey()">저장</button>
-                </div>
-                <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem;">
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent-color)">이곳에서 무료 API 키를 발급받으실 수 있습니다.</a>
-                </p>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">데이터 관리</h2>
-            <p style="margin-bottom: 1.5rem; color: var(--text-dim)">모든 데이터는 브라우저의 로컬 저장소(localStorage)에 보관됩니다. 브라우저 캐시 삭제 시 데이터가 소실될 수 있으니 정기적으로 백업하세요.</p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <button class="btn btn-outline" onclick="exportToCSV()">Excel용 CSV 내보내기</button>
-                <button class="btn btn-outline" onclick="exportToJSON()">JSON 백업하기</button>
-                <label class="btn btn-outline" style="cursor: pointer;">
-                    JSON 복원하기
-                    <input type="file" id="import-json" class="hidden" accept=".json" onchange="importFromJSON(event)">
-                </label>
-                <button class="btn btn-danger" onclick="clearAllData()">전체 데이터 초기화</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">사용 안내</h2>
-            <ul style="padding-left: 1.5rem; color: var(--text-dim); font-size: 0.9rem;">
-                <li>이 애플리케이션은 서버가 없는 클라이언트 사이드 앱입니다.</li>
-                <li>Gemini API 호출을 위해서는 인터넷 연결이 필요합니다.</li>
-                <li>매매 내역을 입력하면 포트폴리오 탭에서 자동으로 집계 결과를 보여줍니다.</li>
-                <li>각 종목행을 클릭하여 수정하거나 삭제할 수 있습니다.</li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<!-- 수정 모달 -->
-<div id="edit-modal" class="modal">
-    <div class="modal-content">
-        <h2 class="card-title" style="margin-bottom: 1.5rem;">기록 수정</h2>
-        <form id="edit-form">
-            <input type="hidden" id="edit-index">
-            <div class="form-group">
-                <label>종목명</label>
-                <input type="text" id="edit-stockName" required>
-            </div>
-            <div class="form-group">
-                <label>업종/섹터</label>
-                <select id="edit-sector" required>
-                    <option value="IT/반도체">IT/반도체</option>
-                    <option value="바이오/헬스케어">바이오/헬스케어</option>
-                    <option value="금융">금융</option>
-                    <option value="에너지/화학">에너지/화학</option>
-                    <option value="소비재/유통">소비재/유통</option>
-                    <option value="자동차/운송">자동차/운송</option>
-                    <option value="건설/부동산">건설/부동산</option>
-                    <option value="엔터테인먼트/미디어">엔터테인먼트/미디어</option>
-                    <option value="통신">통신</option>
-                    <option value="기타">기타</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>매수일</label>
-                <input type="date" id="edit-tradeDate" required>
-            </div>
-            <div class="form-group">
-                <label>매수가 (원)</label>
-                <input type="number" id="edit-tradePrice" required min="1">
-            </div>
-            <div class="form-group">
-                <label>수량</label>
-                <input type="number" id="edit-tradeQuantity" required min="1">
-            </div>
-            <div class="form-group">
-                <label>메모</label>
-                <textarea id="edit-memo" rows="2"></textarea>
-            </div>
-            <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
-                <button type="button" class="btn btn-outline" onclick="closeModal()">취소</button>
-                <button type="submit" class="btn btn-primary">수정 완료</button>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 3rem;">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Abandon</button>
+                <button type="submit" class="btn btn-prime">Sync Changes</button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    /**
-     * @constant {string} STORAGE_KEY - 로컬 스토리지 키
-     * @constant {string} API_KEY_STORAGE - API 키 저장용 로컬 스토리지 키
-     */
-    const STORAGE_KEY = 'STOCK_DIARY_RECORDS';
-    const API_KEY_STORAGE = 'GEMINI_API_KEY';
+    const STORAGE_KEY = 'STOCK_DIARY_RECORDS_ULTRA';
+    const API_KEY_STORAGE = 'GEMINI_API_KEY_ULTRA';
 
-    /** @type {Array} records - 전체 매매 기록 배열 */
     let records = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     let currentSort = { key: 'tradeDate', direction: 'desc' };
     let sectorChartInstance = null;
     let chatHistory = [];
 
-    // 초기화
+    // Initialization
     document.addEventListener('DOMContentLoaded', () => {
         const apiKey = localStorage.getItem(API_KEY_STORAGE);
         if (apiKey) {
             document.getElementById('api-key-input').value = apiKey;
             updateApiStatus(true);
-        } else {
-            updateApiStatus(false);
         }
-        
         renderRecords();
         updateSummary();
-        
-        // 날짜 기본값 오늘로 설정
         document.getElementById('tradeDate').valueAsDate = new Date();
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }, 1000);
     });
 
-    /**
-     * 페이지 전환 함수
-     * @param {string} pageId - 표시할 페이지의 ID
-     */
     function showPage(pageId) {
         document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        
         document.getElementById(pageId).classList.add('active');
         event.currentTarget.classList.add('active');
-
-        if (pageId === 'portfolio') {
-            updateSummary();
-        }
+        if (pageId === 'portfolio') updateSummary();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- 매매 기록 CRUD ---
-
-    /**
-     * 입력 폼에서의 총 금액 실시간 미리보기
-     */
+    // CRUD
     const updatePreview = () => {
         const price = document.getElementById('tradePrice').value || 0;
         const qty = document.getElementById('tradeQuantity').value || 0;
@@ -696,12 +656,8 @@
     document.getElementById('tradePrice').addEventListener('input', updatePreview);
     document.getElementById('tradeQuantity').addEventListener('input', updatePreview);
 
-    /**
-     * 매매 기록 추가 핸들러
-     */
     document.getElementById('record-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        
         const newRecord = {
             id: Date.now(),
             stockName: document.getElementById('stockName').value,
@@ -709,10 +665,8 @@
             tradeDate: document.getElementById('tradeDate').value,
             tradePrice: Number(document.getElementById('tradePrice').value),
             tradeQuantity: Number(document.getElementById('tradeQuantity').value),
-            memo: document.getElementById('memo').value,
             createdAt: new Date().toISOString()
         };
-
         records.push(newRecord);
         saveAndRender();
         e.target.reset();
@@ -720,432 +674,205 @@
         updatePreview();
     });
 
-    /**
-     * 데이터 저장 및 UI 업데이트
-     */
     function saveAndRender() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
         renderRecords();
         updateSummary();
     }
 
-    /**
-     * 기록 삭제
-     */
-    function deleteRecord(id) {
-        if (confirm('정말로 이 기록을 삭제하시겠습니까?')) {
-            records = records.filter(r => r.id !== id);
-            saveAndRender();
-        }
-    }
-
-    /**
-     * 수정 모달 열기
-     */
-    function openEditModal(id) {
-        const record = records.find(r => r.id === id);
-        if (!record) return;
-
-        document.getElementById('edit-index').value = id;
-        document.getElementById('edit-stockName').value = record.stockName;
-        document.getElementById('edit-sector').value = record.sector;
-        document.getElementById('edit-tradeDate').value = record.tradeDate;
-        document.getElementById('edit-tradePrice').value = record.tradePrice;
-        document.getElementById('edit-tradeQuantity').value = record.tradeQuantity;
-        document.getElementById('edit-memo').value = record.memo;
-
-        document.getElementById('edit-modal').classList.add('active');
-    }
-
-    function closeModal() {
-        document.getElementById('edit-modal').classList.remove('active');
-    }
-
-    /**
-     * 수정 폼 제출 핸들러
-     */
-    document.getElementById('edit-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const id = Number(document.getElementById('edit-index').value);
-        const index = records.findIndex(r => r.id === id);
-
-        if (index !== -1) {
-            records[index] = {
-                ...records[index],
-                stockName: document.getElementById('edit-stockName').value,
-                sector: document.getElementById('edit-sector').value,
-                tradeDate: document.getElementById('edit-tradeDate').value,
-                tradePrice: Number(document.getElementById('edit-tradePrice').value),
-                tradeQuantity: Number(document.getElementById('edit-tradeQuantity').value),
-                memo: document.getElementById('edit-memo').value
-            };
-            saveAndRender();
-            closeModal();
-        }
-    });
-
-    // --- 검색, 필터, 정렬 ---
-
-    /**
-     * 테이블 정렬 함수
-     */
-    function sortTable(key) {
-        if (currentSort.key === key) {
-            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-        } else {
-            currentSort.key = key;
-            currentSort.direction = 'desc';
-        }
-        renderRecords();
-    }
-
-    document.getElementById('search-input').addEventListener('input', renderRecords);
-    document.getElementById('filter-sector').addEventListener('change', renderRecords);
-
-    /**
-     * 매매 기록 테이블 렌더링
-     */
     function renderRecords() {
         const tbody = document.getElementById('records-body');
-        const searchTerm = document.getElementById('search-input').value.toLowerCase();
-        const sectorFilter = document.getElementById('filter-sector').value;
-
-        let filtered = records.filter(r => {
-            const matchesSearch = r.stockName.toLowerCase().includes(searchTerm);
-            const matchesSector = sectorFilter === 'all' || r.sector === sectorFilter;
-            return matchesSearch && matchesSector;
+        let filtered = [...records].sort((a,b) => {
+            const valA = currentSort.key === 'totalPrice' ? a.tradePrice * a.tradeQuantity : a[currentSort.key];
+            const valB = currentSort.key === 'totalPrice' ? b.tradePrice * b.tradeQuantity : b[currentSort.key];
+            return currentSort.direction === 'asc' ? (valA < valB ? -1 : 1) : (valA > valB ? -1 : 1);
         });
 
-        // 정렬 적용
-        filtered.sort((a, b) => {
-            let valA = a[currentSort.key];
-            let valB = b[currentSort.key];
-            if (currentSort.key === 'totalPrice') {
-                valA = a.tradePrice * a.tradeQuantity;
-                valB = b.tradePrice * b.tradeQuantity;
-            }
-            if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
-            if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
-            return 0;
-        });
-
-        tbody.innerHTML = filtered.length ? '' : '<tr><td colspan="8" class="text-center" style="padding: 2rem; color: var(--text-dim)">데이터가 없습니다.</td></tr>';
-
+        tbody.innerHTML = filtered.length ? '' : '<tr><td colspan="7" style="text-align:center; padding: 4rem; color:var(--text-soft)">NO POSITIONS DETECTED</td></tr>';
         filtered.forEach(r => {
             const total = r.tradePrice * r.tradeQuantity;
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${r.tradeDate}</td>
-                <td style="font-weight: 600;">${r.stockName}</td>
-                <td><span style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">${r.sector}</span></td>
-                <td class="text-right">₩${r.tradePrice.toLocaleString()}</td>
-                <td class="text-right">${r.tradeQuantity.toLocaleString()}</td>
-                <td class="text-right" style="font-weight: bold; color: var(--accent-color)">₩${total.toLocaleString()}</td>
-                <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${r.memo || '-'}</td>
-                <td class="text-center">
-                    <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openEditModal(${r.id})">수정</button>
-                    <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteRecord(${r.id})">삭제</button>
+                <td style="font-family: 'Space Grotesk';">${r.tradeDate}</td>
+                <td style="font-weight: 800; color: white;">${r.stockName}</td>
+                <td><span style="font-size:0.8rem; background:rgba(56,189,248,0.1); color:var(--primary-neon); padding: 4px 12px; border-radius:100px; border:1px solid var(--border-neon)">${r.sector}</span></td>
+                <td style="text-align:right;">₩${r.tradePrice.toLocaleString()}</td>
+                <td style="text-align:right;">${r.tradeQuantity.toLocaleString()}</td>
+                <td style="text-align:right; font-weight:900; color:var(--primary-neon);">₩${total.toLocaleString()}</td>
+                <td style="text-align:center;">
+                    <span onclick="openEditModal(${r.id})" style="cursor:pointer; margin-right: 15px; color:var(--text-soft); font-size:0.8rem; font-weight:800; border-bottom:1px solid;">EDIT</span>
+                    <span onclick="deleteRecord(${r.id})" style="cursor:pointer; color:var(--danger-neon); font-size:0.8rem; font-weight:800; border-bottom:1px solid;">KILL</span>
                 </td>
             `;
             tbody.appendChild(row);
         });
     }
 
-    // --- 포트폴리오 분석 ---
+    function deleteRecord(id) {
+        if(confirm('이 포지션을 시스템에서 파기하시겠습니까?')) { records = records.filter(r => r.id !== id); saveAndRender(); }
+    }
 
-    /**
-     * 요약 정보 및 차트 업데이트
-     */
+    function openEditModal(id) {
+        const r = records.find(item => item.id === id);
+        if(!r) return;
+        document.getElementById('edit-index').value = id;
+        document.getElementById('edit-stockName').value = r.stockName;
+        document.getElementById('edit-sector').value = r.sector;
+        document.getElementById('edit-tradeDate').value = r.tradeDate;
+        document.getElementById('edit-tradePrice').value = r.tradePrice;
+        document.getElementById('edit-tradeQuantity').value = r.tradeQuantity;
+        document.getElementById('edit-modal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('edit-modal').style.display = 'none'; }
+
+    document.getElementById('edit-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = Number(document.getElementById('edit-index').value);
+        const idx = records.findIndex(r => r.id === id);
+        if(idx !== -1) {
+            records[idx] = { ...records[idx], stockName: document.getElementById('edit-stockName').value, sector: document.getElementById('edit-sector').value, tradeDate: document.getElementById('edit-tradeDate').value, tradePrice: Number(document.getElementById('edit-tradePrice').value), tradeQuantity: Number(document.getElementById('edit-tradeQuantity').value) };
+            saveAndRender(); closeModal();
+        }
+    });
+
+    // Stats
     function updateSummary() {
-        const summary = calculateSummary();
-        
-        // 카드 업데이트
-        document.getElementById('summary-total-invest').textContent = `₩${summary.totalInvest.toLocaleString()}`;
-        document.getElementById('summary-stock-count').textContent = summary.stockCount;
-        document.getElementById('summary-total-qty').textContent = summary.totalQty.toLocaleString();
-        document.getElementById('summary-max-sector').textContent = summary.maxSector || '-';
-
-        // 테이블 렌더링
-        renderStockSummary(summary.stockStats, summary.totalInvest);
-        renderSectorSummary(summary.sectorStats, summary.totalInvest);
-        
-        // 차트 업데이트
-        renderChart(summary.sectorStats);
-    }
-
-    /**
-     * 통계 데이터 계산
-     */
-    function calculateSummary() {
-        const stockMap = {};
-        const sectorMap = {};
-        let totalInvest = 0;
-        let totalQty = 0;
-
+        const stockMap = {}, sectorMap = {};
+        let totalVal = 0, totalQty = 0;
         records.forEach(r => {
-            const amount = r.tradePrice * r.tradeQuantity;
-            totalInvest += amount;
-            totalQty += r.tradeQuantity;
-
-            // 종목별 집계
-            if (!stockMap[r.stockName]) {
-                stockMap[r.stockName] = { stockName: r.stockName, sector: r.sector, qty: 0, amount: 0 };
-            }
-            stockMap[r.stockName].qty += r.tradeQuantity;
-            stockMap[r.stockName].amount += amount;
-
-            // 업종별 집계
-            if (!sectorMap[r.sector]) {
-                sectorMap[r.sector] = { sector: r.sector, amount: 0, stocks: new Set() };
-            }
-            sectorMap[r.sector].amount += amount;
-            sectorMap[r.sector].stocks.add(r.stockName);
+            const amt = r.tradePrice * r.tradeQuantity;
+            totalVal += amt; totalQty += r.tradeQuantity;
+            if(!stockMap[r.stockName]) stockMap[r.stockName] = { name: r.stockName, sector: r.sector, qty: 0, amt: 0 };
+            stockMap[r.stockName].qty += r.tradeQuantity; stockMap[r.stockName].amt += amt;
+            if(!sectorMap[r.sector]) sectorMap[r.sector] = { name: r.sector, amt: 0, count: 0 };
+            sectorMap[r.sector].amt += amt; sectorMap[r.sector].count++;
         });
 
-        const stockStats = Object.values(stockMap).sort((a,b) => b.amount - a.amount);
-        const sectorStats = Object.values(sectorMap).sort((a,b) => b.amount - a.amount);
-        const maxSector = sectorStats.length > 0 ? sectorStats[0].sector : null;
+        document.getElementById('summary-total-invest').textContent = `₩${totalVal.toLocaleString()}`;
+        const stocks = Object.values(stockMap);
+        document.getElementById('summary-stock-count').textContent = stocks.length;
+        const sortedSectors = Object.values(sectorMap).sort((a,b) => b.amt - a.amt);
+        document.getElementById('summary-max-sector').textContent = sortedSectors.length ? sortedSectors[0].name : '-';
 
-        return { totalInvest, totalQty, stockCount: stockStats.length, maxSector, stockStats, sectorStats };
-    }
-
-    function renderStockSummary(stats, totalAll) {
-        const tbody = document.getElementById('stock-summary-body');
-        tbody.innerHTML = stats.length ? '' : '<tr><td colspan="6" class="text-center">기록이 없습니다.</td></tr>';
-        
-        stats.forEach(s => {
-            const avgPrice = Math.round(s.amount / s.qty);
-            const ratio = ((s.amount / totalAll) * 100).toFixed(1);
-            tbody.innerHTML += `
-                <tr>
-                    <td style="font-weight: 600;">${s.stockName}</td>
-                    <td>${s.sector}</td>
-                    <td class="text-right">₩${avgPrice.toLocaleString()}</td>
-                    <td class="text-right">${s.qty.toLocaleString()}</td>
-                    <td class="text-right" style="font-weight:bold">₩${s.amount.toLocaleString()}</td>
-                    <td class="text-right">${ratio}%</td>
-                </tr>
-            `;
+        // Table updates
+        const stockBody = document.getElementById('stock-summary-body');
+        stockBody.innerHTML = '';
+        stocks.forEach(s => {
+            const row = `<tr>
+                <td style="font-weight:800;">${s.name}</td>
+                <td>${s.sector}</td>
+                <td style="text-align:right;">₩${Math.round(s.amt/s.qty).toLocaleString()}</td>
+                <td style="text-align:right;">${s.qty.toLocaleString()}</td>
+                <td style="text-align:right; font-weight:800; color:var(--primary-neon)">₩${s.amt.toLocaleString()}</td>
+                <td style="text-align:right; font-weight:800; font-family:'Space Grotesk'">${((s.amt/totalVal)*100).toFixed(1)}%</td>
+            </tr>`;
+            stockBody.innerHTML += row;
         });
-    }
 
-    function renderSectorSummary(stats, totalAll) {
-        const tbody = document.getElementById('sector-summary-body');
-        tbody.innerHTML = stats.length ? '' : '<tr><td colspan="4" class="text-center">기록이 없습니다.</td></tr>';
-
-        stats.forEach(s => {
-            const ratio = ((s.amount / totalAll) * 100).toFixed(1);
-            tbody.innerHTML += `
-                <tr>
-                    <td>${s.sector}</td>
-                    <td class="text-center">${s.stocks.size}</td>
-                    <td class="text-right">₩${s.amount.toLocaleString()}</td>
-                    <td class="text-right">${ratio}%</td>
-                </tr>
-            `;
+        const sectorBody = document.getElementById('sector-summary-body');
+        sectorBody.innerHTML = '';
+        sortedSectors.forEach(s => {
+            const row = `<tr>
+                <td style="font-weight:700;">${s.name}</td>
+                <td style="text-align:center;">${s.count} Symbols</td>
+                <td style="text-align:right; font-weight:900; color:var(--accent-neon); font-family:'Space Grotesk'">${((s.amt/totalVal)*100).toFixed(1)}%</td>
+            </tr>`;
+            sectorBody.innerHTML += row;
         });
+
+        renderChart(sortedSectors);
     }
 
     function renderChart(stats) {
         const ctx = document.getElementById('sectorChart').getContext('2d');
         if (sectorChartInstance) sectorChartInstance.destroy();
-
-        if (stats.length === 0) return;
-
+        if(!stats.length) return;
         sectorChartInstance = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: stats.map(s => s.sector),
+                labels: stats.map(s => s.name),
                 datasets: [{
-                    data: stats.map(s => s.amount),
-                    backgroundColor: [
-                        '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', 
-                        '#ec4899', '#06b6d4', '#f97316', '#64748b', '#78350f'
-                    ],
-                    borderWidth: 0
+                    data: stats.map(s => s.amt),
+                    backgroundColor: ['#38bdf8', '#818cf8', '#f472b6', '#4ade80', '#fb7185', '#fbbf24', '#a78bfa', '#2dd4bf'],
+                    borderWidth: 0, hoverOffset: 25
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom', labels: { color: '#94a3b8' } }
-                },
-                cutout: '70%'
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: true, position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: 'bold' }, padding: 15 } } },
+                cutout: '80%'
             }
         });
     }
 
-    // --- AI 상담 (Gemini) ---
-
-    function updateApiStatus(hasKey) {
-        const badge = document.getElementById('api-status-badge');
-        const warning = document.getElementById('api-warning');
-        if (hasKey) {
-            badge.textContent = '연결됨';
-            badge.style.background = 'rgba(16, 185, 129, 0.2)';
-            badge.style.color = 'var(--success)';
-            warning.classList.add('hidden');
-        } else {
-            badge.textContent = 'API 키 필요';
-            badge.style.background = 'rgba(239, 68, 68, 0.2)';
-            badge.style.color = 'var(--danger)';
-            warning.classList.remove('hidden');
-        }
+    // AI & Security
+    function updateApiStatus(ok) {
+        const s = document.getElementById('api-status');
+        s.textContent = ok ? 'API STANDBY' : 'API OFFLINE';
+        s.style.color = ok ? 'var(--success-neon)' : 'var(--danger-neon)';
     }
 
     function saveApiKey() {
-        const key = document.getElementById('api-key-input').value.trim();
-        if (key) {
-            localStorage.setItem(API_KEY_STORAGE, key);
-            updateApiStatus(true);
-            alert('API 키가 저장되었습니다.');
-        } else {
-            localStorage.removeItem(API_KEY_STORAGE);
-            updateApiStatus(false);
-            alert('API 키가 삭제되었습니다.');
-        }
+        const val = document.getElementById('api-key-input').value.trim();
+        if(val) { localStorage.setItem(API_KEY_STORAGE, val); updateApiStatus(true); alert('System Authorized.'); }
+        else { localStorage.removeItem(API_KEY_STORAGE); updateApiStatus(false); alert('System De-authorized.'); }
     }
 
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const input = document.getElementById('chat-input');
-        const message = input.value.trim();
-        const apiKey = localStorage.getItem(API_KEY_STORAGE);
-
-        if (!message) return;
-        if (!apiKey) {
-            alert('설정 탭에서 Gemini API 키를 입력해주세요.');
-            return;
-        }
-
-        addChatMessage('user', message);
-        input.value = '';
-        
-        const loadingMsg = addChatMessage('ai', '분석 중입니다<span class="loading-dots"></span>');
-        
+        const msg = document.getElementById('chat-input').value.trim();
+        const key = localStorage.getItem(API_KEY_STORAGE);
+        if(!msg || !key) return;
+        appendMsg('user', msg); document.getElementById('chat-input').value = '';
+        const loader = appendMsg('ai', 'Accessing Gemini Neural Engine...');
         try {
-            const summaryData = calculateSummary();
-            const systemPrompt = `너는 개인 투자 상담 AI 어시스턴트야. 사용자의 현재 포트폴리오 정보는 다음과 같아:
-${JSON.stringify({
-    totalInvest: summaryData.totalInvest,
-    stockCount: summaryData.stockCount,
-    stocks: summaryData.stockStats.map(s => ({
-        name: s.stockName, sector: s.sector, amount: s.amount, qty: s.qty, ratio: ((s.amount/summaryData.totalInvest)*100).toFixed(1) + '%'
-    })),
-    sectors: summaryData.sectorStats.map(s => ({
-        name: s.sector, amount: s.amount, ratio: ((s.amount/summaryData.totalInvest)*100).toFixed(1) + '%'
-    }))
-}, null, 2)}
-이 데이터를 기반으로 투자 조언, 분산투자 분석, 리스크 평가 등을 제공해줘. 답변은 친절하고 전문적으로 작성해주고, 한국어로 답변해줘.`;
-
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [
-                        ...chatHistory.map(h => ({ role: h.role === 'ai' ? 'model' : 'user', parts: [{ text: h.text }] })),
-                        { role: 'user', parts: [{ text: message }] }
-                    ],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                })
+            const summary = {
+                totalValue: document.getElementById('summary-total-invest').textContent,
+                symbols: records.map(r => r.stockName)
+            };
+            const prompt = `주식 투자 전문가로서 아래 포트폴리오 정보를 기반으로 분석해줘: ${JSON.stringify(summary)}. 질문: ${msg}`;
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-preview:generateContent?key=${key}`, {
+                method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
-
-            const data = await response.json();
-            if (data.error) throw new Error(data.error.message);
-
-            const aiResponse = data.candidates[0].content.parts[0].text;
-            loadingMsg.innerHTML = formatAiText(aiResponse) + '<div class="ai-footer">이 정보는 참고용이며, 실제 투자 결정은 전문가와 상담하세요.</div>';
-            
-            chatHistory.push({ role: 'user', text: message });
-            chatHistory.push({ role: 'ai', text: aiResponse });
-
-        } catch (error) {
-            loadingMsg.innerHTML = `<span style="color:var(--danger)">오류 발생: ${error.message}</span>`;
-            console.error(error);
-        } finally {
-            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
-        }
+            const data = await res.json();
+            const text = data.candidates[0].content.parts[0].text;
+            loader.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+        } catch(e) { loader.textContent = 'Neural Connect Failure: ' + e.message; }
     });
 
-    function addChatMessage(role, text) {
-        const container = document.getElementById('chat-container');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${role}`;
-        msgDiv.innerHTML = text;
-        container.appendChild(msgDiv);
-        container.scrollTop = container.scrollHeight;
-        return msgDiv;
+    function appendMsg(role, text) {
+        const board = document.getElementById('chat-board');
+        const d = document.createElement('div');
+        d.className = 'msg ' + role;
+        d.innerHTML = text;
+        board.appendChild(d);
+        board.scrollTop = board.scrollHeight;
+        return d;
     }
-
-    function formatAiText(text) {
-        // 간단한 줄바꿈 처리 및 굵게 표시
-        return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                   .replace(/\n/g, '<br>');
-    }
-
-    // --- 데이터 관리 (백업/복원) ---
 
     function exportToCSV() {
-        if (records.length === 0) return alert('내보낼 데이터가 없습니다.');
-
-        let csv = '\uFEFF날짜,종목명,업종,매수가,수량,총금액,메모\n';
-        records.forEach(r => {
-            csv += `${r.tradeDate},${r.stockName},${r.sector},${r.tradePrice},${r.tradeQuantity},${r.tradePrice * r.tradeQuantity},"${(r.memo || '').replace(/"/g, '""')}"\n`;
-        });
-
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `주식가계부_백업_${new Date().toISOString().slice(0,10)}.csv`;
-        link.click();
+        let csv = '\uFEFFDate,Symbol,Sector,Price,Qty,Total\n';
+        records.forEach(r => csv += `${r.tradeDate},${r.stockName},${r.sector},${r.tradePrice},${r.tradeQuantity},${r.tradePrice*r.tradeQuantity}\n`);
+        const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+        link.download = `Stock_Diary_Ultra_Export.csv`; link.click();
     }
 
     function exportToJSON() {
-        if (records.length === 0) return alert('내보낼 데이터가 없습니다.');
-        const data = JSON.stringify({ version: '1.0', records }, null, 2);
-        const blob = new Blob([data], { type: 'application/json' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `주식가계부_데이터_${new Date().toISOString().slice(0,10)}.json`;
-        link.click();
+        const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([JSON.stringify(records)], {type:'application/json'}));
+        link.download = `Stock_Diary_Ultra_Backup.json`; link.click();
     }
 
-    function importFromJSON(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
+    function importFromJSON(e) {
+        const f = e.target.files[0]; if(!f) return;
         const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (Array.isArray(data.records)) {
-                    if (confirm(`불러온 ${data.records.length}개의 기록을 기존 데이터와 합치시겠습니까? (취소 시 기존 데이터는 유지됩니다)`)) {
-                        records = [...records, ...data.records];
-                    } else if (confirm('기존 데이터를 삭제하고 불러온 데이터로 교체하시겠습니까?')) {
-                        records = data.records;
-                    } else {
-                        return;
-                    }
-                    saveAndRender();
-                    alert('데이터를 성공적으로 불러왔습니다.');
-                } else {
-                    alert('올바른 형식의 백업 파일이 아닙니다.');
-                }
-            } catch (err) {
-                alert('파일을 읽는 중 오류가 발생했습니다.');
-            }
+        reader.onload = (event) => {
+            records = JSON.parse(event.target.result); saveAndRender(); alert('Sync Complete.');
         };
-        reader.readAsText(file);
+        reader.readAsText(f);
     }
 
-    function clearAllData() {
-        if (confirm('모든 매매 기록이 삭제됩니다. 정말로 초기화하시겠습니까?')) {
-            records = [];
-            saveAndRender();
-            alert('모든 데이터가 삭제되었습니다.');
-        }
-    }
+    function clearAllData() { if(confirm('데이터베이스를 영구 파기합니까?')) { records = []; saveAndRender(); } }
 </script>
 
 </body>
